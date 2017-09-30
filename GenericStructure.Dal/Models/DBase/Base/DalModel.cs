@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenericStructure.Dal.Models.Exposed.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericStructure.Dal.Models.Base
+namespace GenericStructure.Dal.Models.DBase.Base
 {
-    public class BaseModel
+    public abstract class DalModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,5 +18,9 @@ namespace GenericStructure.Dal.Models.Base
         [MaxLength(8)]
         [Timestamp]
         public byte[] RowVersion { get; set; }
+
+        public abstract IExposedModel ToExposedModel();
+
+        internal abstract void PopulateFrom(DalModel model);
     }
 }

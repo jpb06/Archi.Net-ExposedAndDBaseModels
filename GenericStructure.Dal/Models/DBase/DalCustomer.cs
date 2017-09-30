@@ -1,14 +1,17 @@
-﻿using GenericStructure.Dal.Models.Base;
+﻿using GenericStructure.Dal.Models.DBase.Base;
+using GenericStructure.Dal.Models.Exposed.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericStructure.Dal.Models
+namespace GenericStructure.Dal.Models.DBase
 {
-    public class Customer : BaseModel
+    [Table("Customers")]
+    internal class DalCustomer : DalModel
     {
         /* ----------------------------------------------------------*/
 
@@ -30,10 +33,19 @@ namespace GenericStructure.Dal.Models
 
         /* ----------------------------------------------------------*/
 
-        public Customer() : base()
+        public DalCustomer() : base()
         {
 
         }
 
+        public override IExposedModel ToExposedModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void PopulateFrom(DalModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

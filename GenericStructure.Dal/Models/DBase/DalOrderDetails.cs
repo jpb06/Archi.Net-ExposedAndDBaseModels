@@ -1,4 +1,5 @@
-﻿using GenericStructure.Dal.Models.Base;
+﻿using GenericStructure.Dal.Models.DBase.Base;
+using GenericStructure.Dal.Models.Exposed.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,9 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericStructure.Dal.Models
+namespace GenericStructure.Dal.Models.DBase
 {
-    public class OrderDetail : BaseModel
+    [Table("OrderDetails")]
+    internal class DalOrderDetails : DalModel
     {
         /* ----------------------------------------------------------*/
         [ForeignKey("Order")]
@@ -30,13 +32,23 @@ namespace GenericStructure.Dal.Models
         public decimal? LineItemTotal { get; set; }
 
         /* ----------------------------------------------------------*/
-        public virtual Order Order { get; set; }
-        public virtual Article Article { get; set; }
+        public virtual DalOrder Order { get; set; }
+        public virtual DalArticle Article { get; set; }
         /* ----------------------------------------------------------*/
 
-        public OrderDetail() : base()
+        public DalOrderDetails() : base()
         {
 
+        }
+
+        public override IExposedModel ToExposedModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void PopulateFrom(DalModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

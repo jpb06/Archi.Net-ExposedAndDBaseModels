@@ -1,4 +1,5 @@
-﻿using GenericStructure.Dal.Models.Base;
+﻿using GenericStructure.Dal.Models.DBase.Base;
+using GenericStructure.Dal.Models.Exposed.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,9 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericStructure.Dal.Models
+namespace GenericStructure.Dal.Models.DBase
 {
-    public class Order : BaseModel
+    [Table("Orders")]
+    internal class DalOrder : DalModel
     {
         /* ----------------------------------------------------------*/
         [ForeignKey("Customer")]
@@ -33,13 +35,23 @@ namespace GenericStructure.Dal.Models
         public DateTime PaymentCardExpiration { get; set; }
 
         /* ----------------------------------------------------------*/
-        public Customer Customer { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public DalCustomer Customer { get; set; }
+        public virtual ICollection<DalOrderDetails> OrderDetails { get; set; }
         /* ----------------------------------------------------------*/
 
-        public Order() : base()
+        public DalOrder() : base()
         {
-            this.OrderDetails = new HashSet<OrderDetail>();
+            this.OrderDetails = new HashSet<DalOrderDetails>();
+        }
+
+        public override IExposedModel ToExposedModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void PopulateFrom(DalModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }
