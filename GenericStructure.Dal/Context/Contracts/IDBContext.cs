@@ -1,4 +1,4 @@
-﻿using GenericStructure.Dal.Models;
+﻿using GenericStructure.Dal.Models.DBase;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace GenericStructure.Dal.Context.Contracts
 {
-    public interface IDBContext
+    internal interface IDBContext
     {
-        IDbSet<Customer> Customers { get; set; }
-        IDbSet<Article> Articles { get; set; }
-        IDbSet<Category> Categories { get; set; }
-        IDbSet<Order> Orders { get; set; }
-        IDbSet<OrderDetail> OrderDetails { get; set; }
+        IDbSet<DalCustomer> Customers { get; set; }
+        IDbSet<DalArticle> Articles { get; set; }
+        IDbSet<DalCategory> Categories { get; set; }
+        IDbSet<DalOrder> Orders { get; set; }
+        IDbSet<DalOrderDetails> OrderDetails { get; set; }
 
         Database Database { get; }
 
