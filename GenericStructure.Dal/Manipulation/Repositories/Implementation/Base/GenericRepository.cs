@@ -1,5 +1,7 @@
 ﻿using GenericStructure.Dal.Context.Contracts;
-using GenericStructure.Dal.Models.Base;
+using GenericStructure.Dal.Manipulation.Repositories.Contracts;
+using GenericStructure.Dal.Models.DBase.Base;
+using GenericStructure.Dal.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,9 +10,9 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericStructure.Dal.Manipulation.Repositories.Base
+namespace GenericStructure.Dal.Manipulation.Repositories.Implementation.Base
 {
-    public class GenericRepository<TEntity> where TEntity : BaseModel
+    internal class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : DalModel
     {
         internal IDBContext context;
         internal DbSet<TEntity> dbSet;
@@ -70,16 +72,25 @@ namespace GenericStructure.Dal.Manipulation.Repositories.Base
         public virtual void Delete(TEntity entityToDelete)
         {
             if (this.context.Entry(entityToDelete).State == EntityState.Detached)
-            {
                 this.dbSet.Attach(entityToDelete);
-            }
+            
             this.dbSet.Remove(entityToDelete);
         }
 
         public virtual void Update(TEntity entityToUpdate)
         {
-            this.dbSet.Attach(entityToUpdate);
-            this.context.Entry(entityToUpdate).State = EntityState.Modified;
+            TEntity localEntity = this.dbSet.Local.Where(_ => _.Id == entityToUpdate.Id).SingleOrDefault();
+            if (localEntity == null)
+            {
+                this.dbSet.Attach(entityToUpdate);
+                this.context.Entry(entityToUpdate).State = EntityState.Modified;
+            }
+            else
+            {
+                localEntity.PopulateFrom(entityToUpdate);
+                this.context.Entry(localEntity).State = EntityState.Modified;
+            }
+            
         }
     }
 }
