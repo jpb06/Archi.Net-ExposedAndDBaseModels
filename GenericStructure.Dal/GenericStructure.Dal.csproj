@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\GenericStructureDotNet\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -50,16 +54,27 @@
   <ItemGroup>
     <Compile Include="Context\Contracts\IDBContext.cs" />
     <Compile Include="Context\GenericStructureContext.cs" />
-    <Compile Include="Manipulation\Repositories\ArticleRepository.cs" />
-    <Compile Include="Manipulation\Repositories\Base\GenericRepository.cs" />
-    <Compile Include="Manipulation\Repositories\CategoryRepository.cs" />
-    <Compile Include="Manipulation\Repositories\CustomerRepository.cs" />
-    <Compile Include="Manipulation\Repositories\OrderDetailRepository.cs" />
-    <Compile Include="Manipulation\Repositories\OrderRepository.cs" />
+    <Compile Include="Exceptions\DalErrorType.cs" />
+    <Compile Include="Exceptions\DalException.cs" />
+    <Compile Include="Exceptions\Custom\DataConflictException.cs" />
+    <Compile Include="Manipulation\Repositories\Implementation\Specific\ArticlesRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Implementation\Base\GenericRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Implementation\Specific\CategoriesRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Contracts\IArticlesRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Contracts\ICategoriesRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Contracts\ICustomersRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Contracts\IGenericRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Contracts\IOrderDetailsRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Contracts\IOrdersRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Implementation\Specific\CustomersRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Implementation\Specific\OrderDetailsRepository.cs" />
+    <Compile Include="Manipulation\Repositories\Implementation\Specific\OrdersRepository.cs" />
+    <Compile Include="Manipulation\Repositories\RepositoriesMapping.cs" />
+    <Compile Include="Manipulation\Repositories\RepositoryLocator.cs" />
     <Compile Include="Manipulation\Services\Base\BaseService.cs" />
     <Compile Include="Manipulation\Services\Base\SaveResult.cs" />
     <Compile Include="Manipulation\Services\Configuration\OptimisticConcurrency.cs" />
-    <Compile Include="Manipulation\Services\Configuration\OptimisticConcurrencyValues.cs" />
+    <Compile Include="Manipulation\Services\Configuration\DataConflictInfo.cs" />
     <Compile Include="Manipulation\Services\OrdersService.cs" />
     <Compile Include="Manipulation\Services\SalesService.cs" />
     <Compile Include="Manipulation\Services\UsersService.cs" />
@@ -68,12 +83,19 @@
       <DependentUpon>201709212110136_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Article.cs" />
-    <Compile Include="Models\Base\BaseModel.cs" />
-    <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\OrderDetail.cs" />
+    <Compile Include="Models\DBase\DalArticle.cs" />
+    <Compile Include="Models\DBase\Base\DalModel.cs" />
+    <Compile Include="Models\DBase\DalCategory.cs" />
+    <Compile Include="Models\DBase\DalCustomer.cs" />
+    <Compile Include="Models\DBase\DalOrder.cs" />
+    <Compile Include="Models\DBase\DalOrderDetails.cs" />
+    <Compile Include="Models\Exposed\Sales\Article.cs" />
+    <Compile Include="Models\Exposed\Contracts\ICustomerModel.cs" />
+    <Compile Include="Models\Exposed\Contracts\IExposedModel.cs" />
+    <Compile Include="Models\Exposed\Sales\Category.cs" />
+    <Compile Include="Models\Exposed\Contracts\IOrdersModel.cs" />
+    <Compile Include="Models\Exposed\Contracts\ISalesModel.cs" />
+    <Compile Include="Models\ModelsExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +107,13 @@
       <DependentUpon>201709212110136_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GenericStructure.Framework\GenericStructure.Framework.csproj">
+      <Project>{b1f478c6-c3eb-45fd-a7db-196c57010b73}</Project>
+      <Name>GenericStructure.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
