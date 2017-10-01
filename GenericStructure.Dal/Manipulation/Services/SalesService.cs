@@ -1,6 +1,7 @@
 ﻿using GenericStructure.Dal.Manipulation.Repositories;
 using GenericStructure.Dal.Manipulation.Services.Base;
 using GenericStructure.Dal.Manipulation.Services.Configuration;
+using GenericStructure.Dal.Manipulation.Services.Contracts;
 using GenericStructure.Dal.Models.DBase;
 using GenericStructure.Dal.Models.DBase.Exposed;
 using GenericStructure.Dal.Models.DBase.Exposed.Sales;
@@ -13,68 +14,68 @@ using System.Threading.Tasks;
 
 namespace GenericStructure.Dal.Manipulation.Services
 {
-    public class SalesService : BaseService
+    public class SalesService : BaseService, ISalesService
     {
         public SalesService() : base() { }
         public SalesService(DataConflictPolicy policy) : base(policy) { }
 
         #region Alteration
-        public int Create<T>(T exposedModel) where T : ISalesModel 
+        public int Create<TExposedModel>(TExposedModel model) where TExposedModel : ISalesModel 
         {
             SaveResult result = null;
 
-            var type = typeof(T);
+            var type = typeof(TExposedModel);
 
             if (type == typeof(Article))
-                result = this.CreateFor<DalArticle, T>(exposedModel);
+                result = base.CreateFor<DalArticle, TExposedModel>(model);
             else if (type == typeof(Category))
-                result = this.CreateFor<DalCategory, T>(exposedModel);
+                result = base.CreateFor<DalCategory, TExposedModel>(model);
 
             result.Validate(1);
 
             return result.AlteredIds[0];
         }
 
-        public void Modify<T>(T exposedModel) where T : ISalesModel 
+        public void Modify<TExposedModel>(TExposedModel model) where TExposedModel : ISalesModel 
         {
             SaveResult result = null;
 
-            var type = typeof(T);
+            var type = typeof(TExposedModel);
 
             if (type == typeof(Article))
-                result = this.ModifyFor<DalArticle, T>(exposedModel);
+                result = base.ModifyFor<DalArticle, TExposedModel>(model);
             else if (type == typeof(Category))
-                result = this.ModifyFor<DalCategory, T>(exposedModel);
+                result = base.ModifyFor<DalCategory, TExposedModel>(model);
 
             result.Validate(1);
         }
 
-        public void Delete<T>(T exposedModel) where T : ISalesModel 
+        public void Delete<TExposedModel>(TExposedModel model) where TExposedModel : ISalesModel 
         {
             SaveResult result = null;
 
-            var type = typeof(T);
+            var type = typeof(TExposedModel);
 
             if (type == typeof(Article))
-                result = this.DeleteFor<DalArticle, T>(exposedModel);
+                result = base.DeleteFor<DalArticle, TExposedModel>(model);
             else if (type == typeof(Category))
-                result = this.DeleteFor<DalCategory, T>(exposedModel);
+                result = base.DeleteFor<DalCategory, TExposedModel>(model);
 
             result.Validate(1);
         }
         #endregion
 
         #region Data
-        public T GetById<T>(int id) where T : ISalesModel 
+        public TExposedModel GetById<TExposedModel>(int id) where TExposedModel : ISalesModel 
         {
-            var type = typeof(T);
+            var type = typeof(TExposedModel);
 
             if (type == typeof(Article))
-                return (T) this.GetByIdFor<DalArticle, T>(id);
+                return (TExposedModel)base.GetByIdFor<DalArticle, TExposedModel>(id);
             else if (type == typeof(Category))
-                return (T) this.GetByIdFor<DalCategory, T>(id);
+                return (TExposedModel)base.GetByIdFor<DalCategory, TExposedModel>(id);
 
-            return default(T);
+            return default(TExposedModel);
         }
         #endregion
     }
